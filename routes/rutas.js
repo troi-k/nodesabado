@@ -2,27 +2,23 @@ const { Router }= require('express')//se trae la fincion router para separ las r
 
 const rutas= Router()//una variable que personaliza mis rutas
 
+//importo los controladopres
+const {registrarJugador} = require('../controllers/controlador.js')
+const {buscarJugador} = require('../controllers/controlador.js')
+const {buscarJugadores} = require('../controllers/controlador.js')
+const {editarJugador} = require('../controllers/controlador.js')
+const {eliminarJugador} = require('../controllers/controlador.js')
 
 //rutas del api
          
-    rutas.get('/avanzada/v1/jugadores', function (req, res) {
-    res.send('peticion tipo get (para buscar todos los jugadores)')
-   })
+    rutas.get('/avanzada/v1/jugadores',buscarJugadores)
 
-    rutas.get('/avanzada/v1/jugadores/id', function (req, res) {
-     res.send('peticion tipo get (para buscar un jugador)')
-    })
+    rutas.get('/avanzada/v1/jugadores/id',buscarJugador)
 
-    rutas.post('/avanzada/v1/jugadores', function (req, res) {
-     res.send('peticion tipo post (para insertar)')
-    })
+    rutas.post('/avanzada/v1/jugadores',registrarJugador)
 
-   rutas.put('/avanzada/v1/jugadores/id', function (req, res) {
-     res.send('peticion tipo put (para editar)')
-   })
+   rutas.put('/avanzada/v1/jugadores/id',editarJugador)
 
-    rutas.delete('/avanzada/v1/jugadores/id', function (req, res) {
-      res.send('peticion tipo delete (para eliminar)')
-    })
+    rutas.delete('/avanzada/v1/jugadores/id',eliminarJugador)
 
     module.exports=rutas 
