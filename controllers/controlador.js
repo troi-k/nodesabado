@@ -1,21 +1,39 @@
-//el controlador se encargara de administrar las peticiones y respuestas
+//EL controlador se encaragar de administrar
+//las peticione y repuestas
+const {request,response}=require('express')
 
-const {request,response}= require('express')
+//importar el servicio
+const {insertarJugador}=require('../services/servicios.js')
 
-//cuales son las operaciones que debe realizar mi servidor
+//cuales son las operaciones
+//que debe realizar mi SERVIDOR
+async function registrarJugador(peticion=request,respuesta=response){
 
-function registrarJugador(peticion=Request,respuesta=response){
+    //capturo los datos que llegan el cuerpo de la peticion
+    let datosCliente=peticion.body;
 
-    respuesta.json(
-        {
+    //intentar grabar los datos een bd usando el servicio
+    try{
+
+        await insertarJugador(datosCliente)
+        respuesta.status(200).json({
             estado:true,
-            mensaje:"estoy resgistrando un jugador"
-        }
-    )
+            mensaje:"exito registrando el jugador"
+        })
 
+    }catch(error){
+        respuesta.status(400).json({
+            estado:false,
+            mensaje:"upsss... "+error
+        })
+        
+    }
+
+   
 }
 
-function buscarJugador(peticion=Request,respuesta=response){
+function buscarJugador(peticion=request,respuesta=response){
+
     respuesta.json(
         {
             estado:true,
@@ -23,10 +41,10 @@ function buscarJugador(peticion=Request,respuesta=response){
         }
     )
 
-
 }
 
-function buscarJugadores(peticion=Request,respuesta=response){
+function buscarJugadores(peticion=request,respuesta=response){
+
     respuesta.json(
         {
             estado:true,
@@ -34,21 +52,21 @@ function buscarJugadores(peticion=Request,respuesta=response){
         }
     )
 
-
 }
 
-function editarJugador(peticion=Request,respuesta=response){
+function editarJugador(peticion=request,respuesta=response){
+
     respuesta.json(
         {
             estado:true,
-            mensaje:"estoy editando un jugador un jugador"
+            mensaje:"estoy editando un jugador"
         }
     )
 
-
 }
 
-function eliminarJugador(peticion=Request,respuesta=response){
+function eliminarJugador(peticion=request,respuesta=response){
+
     respuesta.json(
         {
             estado:true,
@@ -56,7 +74,15 @@ function eliminarJugador(peticion=Request,respuesta=response){
         }
     )
 
-
 }
 
-module.exports={registrarJugador,buscarJugador,buscarJugadores,editarJugador,eliminarJugador}
+
+module.exports={
+
+    registrarJugador,
+    buscarJugador,
+    buscarJugadores,
+    editarJugador,
+    eliminarJugador
+
+}
