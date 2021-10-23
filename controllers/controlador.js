@@ -4,7 +4,10 @@ const {request,response}=require('express')
 
 //importar el servicio
 const {insertarJugador}=require('../services/servicios.js')
-
+const{leerJugador}=require('../services/servicios.js')
+const{leerJugadores}=require('../services/servicios.js')
+const{modificarJugador}=require('../services/servicios.js')
+const{borrarJugador}=require('../services/servicios.js')
 //cuales son las operaciones
 //que debe realizar mi SERVIDOR
 async function registrarJugador(peticion=request,respuesta=response){
@@ -32,47 +35,98 @@ async function registrarJugador(peticion=request,respuesta=response){
    
 }
 
-function buscarJugador(peticion=request,respuesta=response){
+async function buscarJugador(peticion=request,respuesta=response){
 
-    respuesta.json(
-        {
+    //capturar el id del jugador a buscar
+    let id=peticion.params.id
+
+    try{
+
+        let jugador=await leerJugador(id)
+        respuesta.status(200).json({
             estado:true,
-            mensaje:"estoy buscando un jugador"
-        }
-    )
+            datos:jugador
+        })
+
+    }catch(error){
+        respuesta.status(400).json({
+            estado:false,
+            mensaje:"upsss... "+error
+        })
+        
+    }
 
 }
 
-function buscarJugadores(peticion=request,respuesta=response){
+async function buscarJugadores(peticion=request,respuesta=response){
+    try{
 
-    respuesta.json(
-        {
+        let jugadores=await leerJugadores()
+        respuesta.status(200).json({
             estado:true,
-            mensaje:"estoy buscando todos los jugadores"
-        }
-    )
+            datos:jugadores
+        })
+
+    }catch(error){
+        respuesta.status(400).json({
+            estado:false,
+            mensaje:"upsss... "+error
+        })
+        
+    }
+
+   
 
 }
 
-function editarJugador(peticion=request,respuesta=response){
+async function editarJugador(peticion=request,respuesta=response){
+    //recibir los datos del body y el id de los params
 
-    respuesta.json(
-        {
+    let datos=peticion.body
+    let id=peticion.params.id
+
+    try{
+
+        await modificarJugador(id,datos)
+        respuesta.status(200).json({
             estado:true,
-            mensaje:"estoy editando un jugador"
-        }
-    )
+            mensaje:"exito editando el jugador"
+        })
+
+    }catch(error){
+        respuesta.status(400).json({
+            estado:false,
+            mensaje:"upsss... "+error
+        })
+        
+    }
+
+   
+
+   
 
 }
 
-function eliminarJugador(peticion=request,respuesta=response){
+async function eliminarJugador(peticion=request,respuesta=response){
+    let id=peticion.params.id
 
-    respuesta.json(
-        {
+    try{
+
+        await borrarJugador(id)
+        respuesta.status(200).json({
             estado:true,
-            mensaje:"estoy eliminando un jugador"
-        }
-    )
+            mensaje:"exito eliminando el jugador el jugador"
+        })
+
+    }catch(error){
+        respuesta.status(400).json({
+            estado:false,
+            mensaje:"upsss... "+error
+        })
+        
+    }
+
+    
 
 }
 
